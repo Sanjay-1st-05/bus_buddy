@@ -1,0 +1,35 @@
+name: esec_bus
+description: A college bus tracking app
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 🔥 Firebase
+  firebase_core: ^2.27.0
+  firebase_database: ^10.4.0
+  cloud_firestore: ^4.15.0
+
+  # 📍 Location
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.0
+
+  # 🗺️ Maps
+  google_maps_flutter: ^2.5.0
+
+  # 🌐 Network
+  http: ^0.13.6
+
+  flutter_background_service: ^5.0.5
+  flutter_background_service_android: ^6.0.2
+  flutter_local_notifications: ^17.0.0
+
+flutter: 
+  uses-material-design: true
+  assets:
+    - assets/logo.jpeg  
+
+  

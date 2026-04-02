@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429164703926",
+    "project_id": "esec-bus-01",
+    "storage_bucket": "esec-bus-01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429164703926:android:c19c5e7543da5b7dfbb617",
+        "android_client_info": {
+          "package_name": "com.example.esec_bus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmr0gPuFI3JaHO0GsCC6fKsmy8cn9-Kkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
