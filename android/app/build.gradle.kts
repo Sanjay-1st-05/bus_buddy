@@ -24,9 +24,11 @@ android {
         isCoreLibraryDesugaringEnabled = true   // 🔥 IMPORTANT (Kotlin DSL syntax)
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
+}
 
     buildTypes {
         release {

@@ -7,7 +7,17 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "bootstrap-admin": "node scripts/bootstrap-admin.js",
+    "migrate-users": "node scripts/migrate-legacy-users.js",
+    "enable-all-users": "node --use-system-ca scripts/enable-all-users.js",
+    "reconcile-login-accounts": "node --use-system-ca scripts/reconcile-login-accounts.js",
+    "migrate-transport": "node --use-system-ca scripts/migrate-transport-2025-2026.js",
+    "verify-transport": "node --use-system-ca scripts/verify-transport-relationships.js",
+    "reconcile-tracking": "node --use-system-ca scripts/reconcile-tracking-state.js",
+    "provision-users": "node --use-system-ca scripts/provision-users.js",
+    "cleanup-legacy-transport": "node --use-system-ca scripts/cleanup-legacy-transport.js",
+    "deploy-firestore-rules": "node --use-system-ca scripts/deploy-firestore-rules.js"
   },
   "engines": {
     "node": "22"

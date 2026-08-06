@@ -32,6 +32,18 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+**/node_modules/
+**/build/
+**/.gradle/
+**/.dart_tool/
+**/coverage/
+**/firebase-debug.log
+**/firebase-debug.*.log
+**/*.jks
+**/*.keystore
+**/key.properties
+**/.env
+**/.env.*
 
 # Symbolication related
 app.*.symbols
@@ -39,6 +51,11 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 backend/serviceAccountKey.json
+functions/backups/
+functions/reports/
+functions/data/private/
+functions/data/*-users-import.csv
+functions/data/*-users-import.json
 
 # Android Studio will place build artifacts here
 /android/app/debug

@@ -1,0 +1,106 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function hasRole(role) {
+      return signedIn() && request.auth.token.role == role;
+    }
+
+    function isAdmin() {
+      return hasRole('admin');
+    }
+
+    function isAssignedDriver(data) {
+      return hasRole('driver') &&
+        data.assignment.driverId == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow read: if isAdmin() ||
+        (signedIn() && request.auth.uid == userId) ||
+        (signedIn() && resource.data.role == 'driver');
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Read-only projections of the canonical users collection. Cloud
+    // Functions and Admin SDK migrations keep these documents synchronized.
+    match /admins/{userId} {
+      allow read: if isAdmin() ||
+        (signedIn() && request.auth.uid == userId);
+      allow write: if false;
+    }
+
+    match /drivers/{userId} {
+      allow read: if isAdmin() ||
+        (signedIn() && resource.data.userId == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /students/{userId} {
+      allow read: if isAdmin() ||
+        (signedIn() && request.auth.uid == userId);
+      allow write: if false;
+    }
+
+    match /buses/{busId} {
+      allow read: if signedIn();
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() ||
+        (isAssignedDriver(resource.data) &&
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['tracking', 'updatedAt']));
+    }
+
+    match /routes/{routeId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Read-only projection of buses/{busId}.tracking. Drivers continue to
+    // write the existing embedded tracking map, preserving app compatibility.
+    match /tracking/{busId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /trips/{tripId} {
+      allow read: if signedIn();
+      allow create: if hasRole('driver') &&
+        request.resource.data.driverId == request.auth.uid;
+      allow update: if isAdmin() ||
+        (hasRole('driver') && resource.data.driverId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /smartsync_runtime/{busId} {
+      allow read: if isAdmin() ||
+        (hasRole('driver') && resource.data.driverId == request.auth.uid);
+      allow create: if hasRole('driver') &&
+        request.resource.data.driverId == request.auth.uid;
+      allow update: if hasRole('driver') &&
+        resource.data.driverId == request.auth.uid &&
+        request.resource.data.driverId == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+    match /emergencies/{eventId} {
+      allow read: if isAdmin() || hasRole('driver');
+      allow create: if hasRole('driver') &&
+        request.resource.data.driverId == request.auth.uid;
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /app_settings/{document} {
+      allow read, write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

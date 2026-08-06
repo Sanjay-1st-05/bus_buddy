@@ -1,0 +1,3 @@
+userId,password,role,name,mobile,busId,year,department,rollNumber,active
+DRV_BUS_99,ChangeMe-2026!,driver,Example Driver,9000000000,BUS_99,,,,true
+ES26CSE001,ChangeMe-2026!,student,Example Student,,BUS_01,2026,CSE,001,true

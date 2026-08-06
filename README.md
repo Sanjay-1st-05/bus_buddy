@@ -140,5 +140,3 @@ CODE INHALERS - An Upgrowing tech .env
 ---
 
 ## 📄 License
-
-This project is developed for academic and learning purposes.

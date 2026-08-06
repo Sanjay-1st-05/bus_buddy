@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 
-import 'firebase_options.dart';
-import 'theme.dart';
+import 'core/firebase/firebase_options.dart';
+import 'app/theme/app_theme.dart';
 
-import 'ui/splash/splash.dart';
-import 'services/background_location_service.dart';
-import 'services/notification_service.dart';
+import 'features/authentication/presentation/splash.dart';
+import 'core/services/background_location_service.dart';
+import 'core/services/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,8 +48,9 @@ Future<void> initializeService() async {
     androidConfiguration: AndroidConfiguration(
       onStart: onStart,
       autoStart: false,
+      autoStartOnBoot: false,
       isForegroundMode: true,
-      notificationChannelId: 'bus_tracking',
+      foregroundServiceTypes: const [AndroidForegroundType.location],
       initialNotificationTitle: 'Bus Tracking Active',
       initialNotificationContent: 'Waiting for trip start...',
     ),

@@ -7,15 +7,24 @@ const updateLocation = async (req, res) => {
 
   const { busId, latitude, longitude } = req.body;
 
-  if (!busId || !latitude || !longitude) {
+  if (!busId || !Number.isFinite(latitude) || !Number.isFinite(longitude)) {
     return res.status(400).json({ message: "Invalid data" });
   }
 
-  await db.collection("bus_location").doc(busId).set({
-    latitude,
-    longitude,
+  const busRef = db.collection("buses").doc(busId);
+  const busDoc = await busRef.get();
+  if (!busDoc.exists || busDoc.data()?.assignment?.driverId !== req.user.uid) {
+    return res.status(403).json({ message: "Driver is not assigned to this bus" });
+  }
+
+  await busRef.update({
+    "tracking.driverId": req.user.uid,
+    "tracking.currentPoint.latitude": latitude,
+    "tracking.currentPoint.longitude": longitude,
+    "tracking.updatedAt": new Date(),
+    "tracking.isActive": true,
+    "tracking.status": "running",
     updatedAt: new Date(),
-    isActive: true,
   });
 
   res.json({ message: "Location updated (FIREBASE)" });
@@ -24,13 +33,13 @@ const updateLocation = async (req, res) => {
 const getBusLocation = async (req, res) => {
   const { busId } = req.params;
 
-  const doc = await db.collection("bus_location").doc(busId).get();
+  const doc = await db.collection("buses").doc(busId).get();
 
   if (!doc.exists) {
     return res.status(404).json({ message: "Bus location not found" });
   }
 
-  res.json(doc.data());
+  res.json(doc.data().tracking || null);
 };
 
 module.exports = { updateLocation, getBusLocation };
